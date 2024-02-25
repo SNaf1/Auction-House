@@ -1,24 +1,25 @@
-<!-- templates/auction_search.html -->
-
-{% block content %}
-  <h2>Search Results</h2>
-
-  <form method="get" action="{% url 'auction_search' %}">
-    {{ form }}
-    <button type="submit">Search</button>
-  </form>
-
-  {% if auctions %}
-    <ul>
-      {% for auction in auctions %}
-        <li>
-          <strong>{{ auction.title }}</strong> - {{ auction.address }}<br>
-          Start Time: {{ auction.start_time }}, End Time: {{ auction.end_time }}<br>
-          Current Bid: {{ auction.current_bid }}
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No matching auctions found.</p>
-  {% endif %}
-{% endblock %}
+<!-- search_results.html -->
+<div class="container mt-4">
+    <h2 class="mb-4">Search Results for "{{ query }}"</h2>
+    {% if search_results %}
+        <ul class="list-group">
+            {% for result in search_results %}
+                <li class="list-group-item">
+                    <strong>Title:</strong> {{ result.title }}
+                    <br>
+                    <strong>Description:</strong> {{ result.description }}
+                    <br>
+                    <strong>Start Time:</strong> {{ result.start_time }}
+                    <br>
+                    <strong>End Time:</strong> {{ result.end_time }}
+                    <br>
+                    <strong>Current Bid:</strong> {{ result.current_bid }}
+                    <br>
+                    <strong>Address:</strong> {{ result.address }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No matching auctions found.</p>
+    {% endif %}
+</div>

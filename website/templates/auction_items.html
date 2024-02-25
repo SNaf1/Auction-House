@@ -1,6 +1,11 @@
 <!-- auction_items.html -->
 
-<a href="{% url 'auction_search' %}">Search for Auctions</a>
+<div class="search-container">
+    <form action="{% url 'search_auction' %}" method="GET">
+        <input type="text" placeholder="Search for auctions..." name="query" required>
+        <button type="submit">Search</button>
+    </form>
+</div>
 
 {% block content %}
   <h2>Live Auctions</h2>

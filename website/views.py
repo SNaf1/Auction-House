@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from .models import AuctionItem
 from .forms import AuctionSearchForm
+from django.db.models import Q
 
 
 def auction_items(request):
@@ -20,12 +21,14 @@ def auction_items(request):
     })
 
 
-def auction_search(request):
-    form = AuctionSearchForm(request.GET)
+def search_auction(request):
+    query = request.GET.get('query', '')
     auctions = AuctionItem.objects.all()
+    search_results = []
 
-    if form.is_valid():
-        search_query = form.cleaned_data['search_query']
-        auctions = auctions.filter(models.Q(title__icontains=search_query) | models.Q(address__icontains=search_query))
+    if query:
+        search_results = AuctionItem.objects.filter(
+            Q(title__icontains=query) | Q(address__icontains=query)
+        )
 
-    return render(request, 'auction_search.html', {'form': form, 'auctions': auctions})
+    return render(request, 'auction_search.html', {'auctions': auctions, 'search_results': search_results, 'query': query})
