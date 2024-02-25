@@ -1,5 +1,5 @@
 # views.py
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .models import AuctionItem
 from .forms import AuctionSearchForm
@@ -21,6 +21,10 @@ def auction_items(request):
     })
 
 
+def auction_detail(request, item_id):
+    auction_detail = get_object_or_404(AuctionItem, id=item_id)
+    return render(request, 'auction_detail.html', {'auction_detail': auction_detail})
+
 def search_auction(request):
     query = request.GET.get('query', '')
     auctions = AuctionItem.objects.all()
@@ -32,3 +36,4 @@ def search_auction(request):
         )
 
     return render(request, 'auction_search.html', {'auctions': auctions, 'search_results': search_results, 'query': query})
+

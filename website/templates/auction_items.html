@@ -13,9 +13,10 @@
     <ul>
       {% for auction in live_auctions %}
         <li>
-          <strong>{{ auction.title }}</strong> - {{ auction.description }}<br>
-          Start Time: {{ auction.start_time }}, End Time: {{ auction.end_time }}<br>
-          Current Bid: {{ auction.current_bid }}
+            <a href="{% url 'auction_detail' auction.id %}">
+                <strong>{{ auction.title }}</strong> - {{ auction.description }}<br>
+                Start Time: {{ auction.start_time }}, End Time: {{ auction.end_time }}<br>
+                Current Bid: {{ auction.current_bid }}
         </li>
       {% endfor %}
     </ul>
@@ -25,13 +26,15 @@
 
   <hr>
 
+
   <h2>Upcoming Auctions</h2>
   {% if upcoming_auctions %}
     <ul>
       {% for auction in upcoming_auctions %}
         <li>
-          <strong>{{ auction.title }}</strong> - {{ auction.description }}<br>
-          Start Time: {{ auction.start_time }}, End Time: {{ auction.end_time }}
+            <a href="{% url 'auction_detail' auction.id %}">
+                <strong>{{ auction.title }}</strong> - {{ auction.description }}<br>
+                Start Time: {{ auction.start_time }}, End Time: {{ auction.end_time }}
         </li>
       {% endfor %}
     </ul>
