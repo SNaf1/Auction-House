@@ -1,0 +1,24 @@
+<!-- templates/auction_search.html -->
+
+{% block content %}
+  <h2>Search Results</h2>
+
+  <form method="get" action="{% url 'auction_search' %}">
+    {{ form }}
+    <button type="submit">Search</button>
+  </form>
+
+  {% if auctions %}
+    <ul>
+      {% for auction in auctions %}
+        <li>
+          <strong>{{ auction.title }}</strong> - {{ auction.address }}<br>
+          Start Time: {{ auction.start_time }}, End Time: {{ auction.end_time }}<br>
+          Current Bid: {{ auction.current_bid }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No matching auctions found.</p>
+  {% endif %}
+{% endblock %}
