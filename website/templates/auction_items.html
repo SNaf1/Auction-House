@@ -1,44 +1,51 @@
 <!-- auction_items.html -->
 
-<div class="search-container">
-    <form action="{% url 'search_auction' %}" method="GET">
-        <input type="text" placeholder="Search for auctions..." name="query" required>
-        <button type="submit">Search</button>
-    </form>
-</div>
-
 {% block content %}
-  <h2>Live Auctions</h2>
-  {% if live_auctions %}
+<div class="container mt-4">
+    <h2 class="mb-4">Auction Items</h2>
+
+    <!-- Search form -->
+    <div class="search-container">
+        <form action="{% url 'search_auction' %}" method="GET">
+            <input type="text" placeholder="Search for auctions..." name="query" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- Display Auction Items -->
     <ul>
-      {% for auction in live_auctions %}
-        <li>
-            <a href="{% url 'auction_detail' auction.id %}">
-                <strong>{{ auction.title }}</strong> - {{ auction.description }}<br>
-                Start Time: {{ auction.start_time }}, End Time: {{ auction.end_time }}<br>
-                Current Bid: {{ auction.current_bid }}
-        </li>
-      {% endfor %}
+        <h2>Live Auctions</h2>
+        <ul id="live-auctions">
+            {% for auction in live_auctions %}
+            <li>
+                <a href="{% url 'auction_detail' auction.id %}">
+                    <strong>{{ auction.title }}</strong> - {{ auction.description }}<br>
+                    Start Time: <span class="start-time">{{ auction.start_time }}</span>, End Time: {{ auction.end_time }}<br>
+                    Current Bid: {{ auction.current_bid }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <hr>
+
+        <h2>Upcoming Auctions</h2>
+        {% if upcoming_auctions %}
+        <ul id="upcoming-auctions">
+            {% for auction in upcoming_auctions %}
+            <li>
+                <a href="{% url 'auction_detail' auction.id %}">
+                    <strong>{{ auction.title }}</strong> - {{ auction.description }}<br>
+                    Start Time: <span class="start-time">{{ auction.start_time }}</span>, End Time: {{ auction.end_time }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No upcoming auctions at the moment.</p>
+        {% endif %}
     </ul>
-  {% else %}
-    <p>No live auctions at the moment.</p>
-  {% endif %}
-
-  <hr>
 
 
-  <h2>Upcoming Auctions</h2>
-  {% if upcoming_auctions %}
-    <ul>
-      {% for auction in upcoming_auctions %}
-        <li>
-            <a href="{% url 'auction_detail' auction.id %}">
-                <strong>{{ auction.title }}</strong> - {{ auction.description }}<br>
-                Start Time: {{ auction.start_time }}, End Time: {{ auction.end_time }}
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No upcoming auctions at the moment.</p>
-  {% endif %}
+</div>
 {% endblock %}
