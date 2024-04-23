@@ -1,0 +1,97 @@
+<!-- bidding.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+        
+  input,
+  select,
+  textarea {
+      color: black;
+  }
+  .container-col1{
+    background-color: rgba(255,255,255,0.7);
+    width: 50%;
+    height: 60%;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .container-col1 > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+
+</style>
+  <div class="container mt-4">
+    <div class="row">
+      <!-- Display Auction Image -->
+      <div class="container-col1">
+        <img src="{{ auction.image.url }}" alt="{{ auction.title }}" class="img-fluid">
+      </div>
+
+      <div class="col-md-6">
+        <div class="card p-4 border-primary rounded shadow" style="background-color: #001f3f; color: white;">
+          <!-- Countdown Timer Section -->
+          <div id="countdown" class="text-danger mb-4" style="text-align: center; font-weight: bold; font-size: 20px;"></div> 
+          
+          <h2 class="card-title text-light mb-4" style="text-align: center;">Property Detail</h2>
+          <p class="card-text text-light">
+            Title: {{ auction.title }}<br>
+            Description: {{ auction.description }}<br>
+            Address: {{ auction.address }}<br>
+            Start Time: {{ auction.start_time }}<br>
+            End Time: {{ auction.end_time }}<br>
+            Starting Price: {{ auction.start_price }}<br>
+            Current Bid: {{ auction.current_bid }} <br>
+          </p>
+          <p id="prediction-message"><a href="#" id="predict-link">Click here to get a prediction from AI about the price of the house.</a></p>
+          <p id="prediction-value" style="display: none;"><strong>Approx. Value:</strong> <span id="predicted-value"></span> Tk</p>
+          <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+          </form><br>
+          {% if message %}
+            <p class="text-danger">{{ message }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript for countdown timer
+    var endDateTime = new Date("{{ auction.end_time|date:'Y-m-d\TH:i:s' }}").getTime();
+
+    var x = setInterval(function() {
+      var now = new Date().getTime();
+      var distance = endDateTime - now;
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerHTML = "Time Left: " + days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("countdown").innerHTML = "Auction has Ended!";
+      }
+    }, 1000);
+    // JavaScript for prediction value
+    document.getElementById("predict-link").addEventListener("click", function(event) {
+      event.preventDefault();
+      document.getElementById("prediction-message").innerHTML = "Predicting...";
+      setTimeout(function() {
+        var predictedValue = {{ predicted_value|default:"'N/A'" }};
+        document.getElementById("predicted-value").textContent = predictedValue;
+        document.getElementById("prediction-message").style.display = "none";
+        document.getElementById("prediction-value").style.display = "block";
+      }, 2000);
+    });
+
+  </script>
+
+{% endblock %}
